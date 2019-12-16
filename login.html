@@ -1,0 +1,35 @@
+<! DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+       $(function() {
+           /**
+            * ログイン済
+            */
+           if (document.cookie.indexOf("userId") != -1) {
+              window.location.href = "./dodontoHe.html";
+           }
+           $("#myform").submit(function(e) {
+               e.preventDefault();
+               var strong = 1000;
+               var userId = new Date().getTime().toString(16)  + Math.floor(strong*Math.random()).toString(16);
+               var now = new Date();
+               now.setDate(now.getDate() + 1);
+               document.cookie = "userName=" + $("#user").val() + ";expires=" + now.toUTCString(); 
+               document.cookie = "userId=" + userId + ";expires=" + now.toUTCString(); 
+               document.cookie = "createFlag=0 ;expires=" + now.toUTCString(); 
+
+               window.location.href = './dodontoHe.html';
+           });e
+       });
+    </script>
+    <title>chat</title>
+</head>
+<body>
+    <form id="myform">
+        <input type="text" id="user"> <input type="submit" value="入室">
+    </form>
+</body>
+</html>

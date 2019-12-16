@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="./style.css">
+    <link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="//malsup.github.com/jquery.form.js"></script>
+    <script src="http://13.115.118.158:49152/socket.io/socket.io.js"></script>
+    <script src="./js/anime-master/lib/anime.min.js"></script>
+    <script src="./js/jquery.tiny-draggable.js"></script>
+    <script src="./js/dice.js"></script>
+    <script src="./js/app.js"></script>
+    <title>dodontoHe</title>
+</head>
+<body>
+    <input type="hidden" value="" id="cookie-userId">
+    <input type="hidden" value="" id="cookie-userName">
+    <form action="/dodontoHe/file/saveImage.php" id="map-form" enctype="multipart/form-data" method="post">
+      <input name="file_upload" type="file" class="file-upload" onchange="$('#map-form').submit()">
+      <input type="submit" value="アップロード" class="file-upload-btn">
+    </form>
+    <div class="menu-area">
+        <div id="top-user-img">
+            <img src="./character/image/unknown.jpg">
+        </div>
+        <ul id="create-char"><a href="./character/createCharacter.html" target="_blank" class="menu-text">キャラ作成/編集</a></ul>
+        <ul class="menu-text" id="change-map">マップ変更</ul>
+    </div>
+    <div id="left-window">
+        <div id='chat-area'></div>
+        <form id="myform">
+            <input type="textarea" id="msg"><input type="submit" id="sendbtn" value="送信">
+        </form>
+    </div>
+    <div id='tab-area'>
+        <input id="tab-map" type="radio" name="tab-item" checked>
+        <label class="tab-item" for="tab-map">Map</label>
+        <input id="tab-user" type="radio" name="tab-item">
+        <label class="tab-item" for="tab-user">Users</label>
+        <input id="tab-memo" type="radio" name="tab-item">
+        <label class="tab-item" for="tab-memo">Memo</label>
+        <div class="tab-content" id="map-content">
+            <img src="/dodontoHe/file/image/room/map/map_image.jpg" class="map" id="map">
+        </div>
+        <div class="tab-content" id="user-content">
+          <div class="user-select-area">
+            <div class="user-name" id="user-name">
+              <ul>
+              </ul>
+            </div>
+          </div><div class="user-info-status">
+            <div class="user-info-status-main">
+              <div class="user-info-status-img">
+                <img src="./character/image/unknown.jpg">
+              </div>
+              <div class="user-info-main">
+                <li class="profile-title">探索者プロフィール</li>
+                <table>
+                  <tr><td>探索者名</td><td class="name"></td></tr>
+                  <tr><td>性別</td><td class="sex"></td></tr>
+                  <tr><td>年齢</td><td class="age"></td></tr>
+                  <tr><td>職業</td><td class="job"></td></tr>
+                  <tr><td>出身</td><td class="graduate"></td></tr>
+                </table>
+              </div>
+            </div>
+            <div class="user-info-status-detail">
+              <div class="user-info-status-fixed">
+                <li class="profile-title">固定能力値</li>
+                <table>
+                  <tr><td>STR(筋力)</td><td class="str"></td></tr>
+                  <tr><td>CON(体力)</td><td class="con"></td></tr>
+                  <tr><td>POW(精神力)</td><td class="pow"></td></tr>
+                  <tr><td>DEX(敏捷性)</td><td class="dex"></td></tr>
+                  <tr><td>APP(外見)</td><td class="app"></td></tr>
+                  <tr><td>SIZ(体格)</td><td class="size"></td></tr>
+                  <tr><td>INT(知性)</td><td class="int"></td></tr>
+                  <tr><td>EDU(教育)</td><td class="edu"></td></tr>
+                  <tr><td>年収・財産</td><td class="asset"></td></tr>
+                  <tr><td class="dice-judge">アイデア</td><td class="idea"></td></tr>
+                  <tr><td class="dice-judge">幸運</td><td class="luck"></td></tr>
+                  <tr><td class="dice-judge">知識</td><td class="education"></td></tr>
+                </table>
+              </div>
+              <div class="user-info-status-table user-info-status-variable">
+                <li class="profile-title">可変能力値</li>
+                <table>
+                  <tr><td>HP</td><td class="hp"></td></tr>
+                  <tr><td>MP</td><td class="mp"></td></tr>
+                  <tr><td class="dice-judge">SAN</td><td class="san"></td></tr>
+                </table>
+              </div>
+              <div class="user-info-status-table user-info-status-skill">
+                <li class="profile-title">技能</li>
+                <table>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+              <div class="user-info-status-table user-info-status-item">
+                <li class="profile-title">所持品</li>
+                <table>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="user-info-status-load"></div>
+        </div>
+        <div class="tab-content" id="memo-content">
+          <div class="memo-select-area" id="memo-select-area">
+            <ul>
+              <li class="memo-selected">新規メモ</li>
+              <input type="hidden" class="tmp-memo-title">
+              <input type="hidden" class="tmp-memo-text">
+            </ul>
+            <button class="add-memo">＋</button>
+          </div>
+          <div class="memo-area" id="memo-area">
+            <input type="text" class="memo-title" value="新規メモ">
+            <button class="btn-memo-shared">共有</button>
+            <textarea class="memo-text"></textarea>
+          </div>
+        </div>
+    </div>
+    <div class="dice-throw-area">
+    </div>
+    <div id="dice-area">
+        <button class="dice-select-option" id="dice-throw">throw</button>
+        <button class="dice-select-option" id="dice-delete">delete</button>
+        <img src="./image/4_dice/4_dice[4].png" alt="" class="dice-select-img" id="4-dice-select" val="4">
+        <img src="./image/6_dice/6_dice[6].png" alt="" class="dice-select-img" id="6-dice-select" val="6">
+        <img src="./image/6_dice_black/6_dice[6].png" alt="" class="dice-select-img" id="6b-dice-select" val="6">
+        <img src="./image/8_dice/8_dice[8].png" alt="" class="dice-select-img" id="8-dice-select" val="8">
+        <img src="./image/10_dice/10_dice[10].png" alt="" class="dice-select-img" id="10-dice-select" val="10">
+        <img src="./image/12_dice/12_dice[12].png" alt="" class="dice-select-img" id="12-dice-select" val="12">
+        <img src="./image/20_dice/20_dice[20].png" alt="" class="dice-select-img" id="20-dice-select" val="20">
+        <img src="./image/100_dice/100_dice[90].png" alt="" class="dice-select-img" id="100-dice-select" val="100">
+    </div>
+    </body>
+</html>

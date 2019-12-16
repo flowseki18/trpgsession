@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="./style.css">
+  <title>createCharacter</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="http://13.115.118.158:49152/socket.io/socket.io.js"></script>
+  <script src="//malsup.github.com/jquery.form.js"></script>
+  <script src="./app.js"></script>
+</head>
+<body>
+  <header class="header"></header>
+  <form action="/dodontoHe/file/saveCharacterImage.php" id="form" enctype="multipart/form-data" method="post">
+    <input name="file_upload" type="file" class="file-upload" onchange="$('#form').submit()">
+    <input type="submit" value="アップロード" class="file-upload-btn">
+  </form>
+  <form>
+  <input type="hidden" class="cookie-userId" value="" name="cookie-userId" id="cookie-userId">
+  <div class="title">探索者プロフィール</div>
+    <div class="basic-profile-area">
+      <div class="char-img">
+        <img src="./image/unknown.jpg" alt="">
+        <input type="hidden" class="img-path" value="" name="imgpath">
+        <label>ファイル選択</label>
+      </div>
+      <table class="basic-profile">
+        <tr class="table-row">
+          <td class="table-cell">探索者名</td>
+          <td class="table-cell"><input type="text" name="name"></td>
+        </tr>
+        <tr class="table-row">
+          <td class="table-cell">性別</td>
+          <td class="table-cell"><input type="text" name="sex"></td>
+        </tr>
+        <tr class="table-row">
+          <td class="table-cell">年齢</td>
+          <td class="table-cell"><input type="text" name="age"></td>
+        </tr>
+        <tr class="table-row">
+          <td class="table-cell">職業</td>
+          <td class="table-cell"><input type="text" name="job"></td>
+        </tr>
+        <tr class="table-row">
+          <td class="table-cell">出身</td>
+          <td class="table-cell"><input type="text" name="graduate"></td>
+        </tr>
+      </table>
+    </div>
+    <div class="title">能力値</div>
+    <div class="basic-status-area">
+      <table class="basic-status"  cellpadding="10">
+        <tr class="table-row table-head">
+          <td class="table-cell">能力</td>
+          <td class="table-cell">能力値</td>
+          <td class="table-cell">増減</td>
+          <td class="table-cell">ダイス</td>
+        </tr>
+        <tr class="table-row">
+          <td class="table-cell">STR(筋力)</td>
+          <td class="table-cell"><input type="text" name="str" pattern="^[0-9]+$"></td>
+          <td class="table-cell">
+            <button type="button" class="basic-status-up">＋</button>
+            <button type="button" class="basic-status-down">ー</button>
+          </td>
+          <td class="table-cell"><button type="button" class="basic-status-dice dice-3d6">3D6</button></td>
+        </tr>
+        <tr class="table-row">
+          <td class="table-cell">CON(体力)</td>
+          <td class="table-cell"><input type="text" name="con"></td>
+          <td class="table-cell">
+            <button type="button" class="basic-status-up">＋</button>
+            <button type="button" class="basic-status-down">ー</button>
+          </td>
+          <td class="table-cell"><button type="button" class="basic-status-dice dice-3d6">3D6</button></td>
+        </tr>
+        <tr class="table-row">
+          <td class="table-cell">POW(精神力)</td>
+          <td class="table-cell"><input type="text" name="pow"></td>
+          <td class="table-cell">
+            <button type="button" class="basic-status-up">＋</button>
+            <button type="button" class="basic-status-down">ー</button>
+          </td>
+          <td class="table-cell"><button type="button" class="basic-status-dice dice-3d6">3D6</button></td>
+        </tr>
+        <tr class="table-row">
+          <td class="table-cell">DEX(敏捷性)</td>
+          <td class="table-cell"><input type="text" name="dex"></td>
+          <td class="table-cell">
+            <button type="button" class="basic-status-up">＋</button>
+            <button type="button" class="basic-status-down">ー</button>
+          </td>
+          <td class="table-cell"><button type="button" class="basic-status-dice dice-3d6">3D6</button></td>
+        </tr>
+        <tr class="table-row">
+          <td class="table-cell">APP(外見)</td>
+          <td class="table-cell"><input type="text" name="app"></td>
+          <td class="table-cell">
+            <button type="button" class="basic-status-up">＋</button>
+            <button type="button" class="basic-status-down">ー</button>
+          </td>
+          <td class="table-cell"><button type="button" class="basic-status-dice dice-3d6">3D6</button></td>
+        </tr>
+        <tr class="table-row">
+          <td class="table-cell">SIZ(体格)</td>
+          <td class="table-cell"><input type="text" name="size"></td>
+          <td class="table-cell">
+            <button type="button" class="basic-status-up">＋</button>
+            <button type="button" class="basic-status-down">ー</button>
+          </td>
+          <td class="table-cell"><button type="button" class="basic-status-dice dice-3d6">2D6+6</button></td>
+        </tr>
+        <tr class="table-row">
+          <td class="table-cell">INT(知性)</td>
+          <td class="table-cell"><input type="text" name="int"></td>
+          <td class="table-cell">
+            <button type="button" class="basic-status-up">＋</button>
+            <button type="button" class="basic-status-down">ー</button>
+          </td>
+          <td class="table-cell"><button type="button" class="basic-status-dice dice-3d6">2D6+6</button></td>
+        </tr>
+        <tr class="table-row">
+          <td class="table-cell">EDU(教育)</td>
+          <td class="table-cell"><input type="text" name="edu"></td>
+          <td class="table-cell">
+            <button type="button" class="basic-status-up">＋</button>
+            <button type="button" class="basic-status-down">ー</button>
+          </td>
+          <td class="table-cell"><button type="button" class="basic-status-dice dice-3d6">3D6+3</button></td>
+        </tr>
+        <tr class="table-row">
+          <td class="table-cell">年収・財産</td>
+          <td class="table-cell"><input type="text" name="asset"></td>
+          <td class="table-cell">
+            <button type="button" class="basic-status-up">＋</button>
+            <button type="button" class="basic-status-down">ー</button>
+          </td>
+          <td class="table-cell"><button type="button" class="basic-status-dice dice-3d6">3D6</button></td>
+        </tr>
+      </table>
+      <table class="basic-points"  cellpadding="10">
+        <tr class="table-row table-head">
+          <td class="table-cell">項目</td>
+          <td class="table-cell">数式</td>
+          <td class="table-cell">ポイント</td>
+          <td class="table-cell">増減</td>
+        </tr>
+        <tr class="table-row">
+          <td class="table-cell">SAN(正気度)</td>
+          <td class="table-cell">POW×5</td>
+          <td class="table-cell" id="san">
+            <input type="text" name="san" disabled="disabled">
+            <input type="hidden" name="san">
+          </td>
+          <td class="table-cell">
+            <button type="button" class="basic-points-up">＋</button>
+            <button type="button" class="basic-points-down">ー</button>
+          </td>
+        </tr>
+        <tr class="table-row">
+          <td class="table-cell">幸運</td>
+          <td class="table-cell">POW×5</td>
+          <td class="table-cell" id="luck">
+            <input type="text" name="luck" disabled="disabled">
+            <input type="hidden" name="luck">
+          </td>
+          <td class="table-cell">
+            <button type="button" class="basic-points-up">＋</button>
+            <button type="button" class="basic-points-down">ー</button>
+          </td>
+        </tr>
+        <tr class="table-row">
+          <td class="table-cell">アイデア</td>
+          <td class="table-cell">INT×5</td>
+          <td class="table-cell" id="idea">
+            <input type="text" name="idea" disabled="disabled">
+            <input type="hidden" name="idea">
+          </td>
+          <td class="table-cell">
+            <button type="button" class="basic-points-up">＋</button>
+            <button type="button" class="basic-points-down">ー</button>
+          </td>
+        </tr>
+        <tr class="table-row">
+          <td class="table-cell">知識</td>
+          <td class="table-cell">EDU×5</td>
+          <td class="table-cell" id="education">
+            <input type="text" name="education" disabled="disabled">
+            <input type="hidden" name="education">
+          </td>
+          <td class="table-cell">
+            <button type="button" class="basic-points-up">＋</button>
+            <button type="button" class="basic-points-down">ー</button>
+          </td>
+        </tr>
+        <tr class="table-row">
+          <td class="table-cell">HP</td>
+          <td class="table-cell">(CON+SIZE)/2</td>
+          <td class="table-cell" id="hp">
+            <input type="text" name="hp" disabled="disabled">
+            <input type="hidden" name="hp">
+          </td>
+          <td class="table-cell">
+            <button type="button" class="basic-points-up">＋</button>
+            <button type="button" class="basic-points-down">ー</button>
+          </td>
+        </tr>
+        <tr class="table-row">
+          <td class="table-cell">MP</td>
+          <td class="table-cell">POW×1</td>
+          <td class="table-cell" id="mp">
+            <input type="text" name="mp" disabled="disabled">
+            <input type="hidden" name="mp">
+          </td>
+          <td class="table-cell">
+            <button type="button" class="basic-points-up">＋</button>
+            <button type="button" class="basic-points-down">ー</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="title">技能</div>
+    <div class="skill-point-area">
+      <table class="skill-point"  cellpadding="10">
+        <tr class="table-row">
+          <td class="table-cell">職業P</td>
+          <td class="table-cell" id="job-p">
+            <input type="text" name="current-jobP" disabled="disabled">
+            /
+            <input type="text" name="total-jobP" disabled="disabled">
+          </td>
+        </tr>
+        <tr class="table-row" id="interest-p">
+          <td class="table-cell">興味P</td>
+          <td class="table-cell">
+            <input type="text" name="current-interestP" disabled="disabled">
+            /
+            <input type="text" name="total-interestP" disabled="disabled">
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="skill-point-area custom-skill-area">
+      <table class="battle-points">
+        <tr class="table-row table-head">
+          <td class="table-cell">技能名</td>
+          <td class="table-cell">初期値</td>
+          <td class="table-cell">職業P</td>
+          <td class="table-cell">興味P</td>
+          <td class="table-cell">成長分</td>
+          <td class="table-cell">その他</td>
+          <td class="table-cell">合計</td>
+        </tr>
+        <tr class="table-row">
+          <td class="table-cell">
+            <input type="text" name="SPNAME[]" class="skill-name">
+            <button type="button" class="skill-select-btn">選択</button>
+          </td>
+          <td class="table-cell">
+            <input type="text" name="SPINIT[]" class="init-point-disp no-calc-point" disabled="disabled">
+            <input type="hidden" name="SPINIT[]" class="init-point">
+          </td>
+          <td class="table-cell"><input type="text" name="SPJOB[]" class="job-point"></td>
+          <td class="table-cell"><input type="text" name="SPINTE[]" class="interest-point"></td>
+          <td class="table-cell"><input type="text" name="SPGROW[]" class="grow-point"></td>
+          <td class="table-cell"><input type="text" name="SPOTHER[]" class="other-point"></td>
+          <td class="table-cell">
+            <input type="text" name="SPTOTAL[]" class="total-point-disp no-calc-point" disabled="disabled">
+            <input type="hidden" name="SPTOTAL[]" class="total-point no-calc-point">
+          </td>
+        </tr>
+      </table>
+      <button type="button" class="add-skill-btn">＋</button>
+      <button type="button" class="delete-skill-btn">-</button>
+    </div>
+    <div class="title">所持品</div>
+    <div class="item-area">
+      <table class="item">
+        <tr class="table-row table-head">
+          <td class="table-cell">名称</td>
+          <td class="table-cell">効果・備考など</td>
+        </tr>
+        <tr class="table-row">
+          <td class="table-cell"><input type="text" name="ITEMNAME[]" class="item-name"></td>
+          <td class="table-cell"><input type="text" name="ITEMDETAIL[]" class="item-detail"></td>
+        </tr>
+      </table>
+      <button type="button" class="add-skill-btn">＋</button>
+      <button type="button" class="delete-skill-btn">-</button>
+    </div>
+    <button type="button" class="send-btn">送信</button>
+  </form>
+  <div class="another-window" id="skill-select-window">
+    <div class="skill-select-area">
+      <h class="skill-header">戦闘技能</h>
+      <li class="skill-name" id="avoidance">回避<input type="hidden" value=""></li>
+      <li class="skill-name">キック<input type="hidden" value="25"></li>
+      <li class="skill-name"> 組みつき<input type="hidden" value="25"></li>
+      <li class="skill-name"> こぶし<input type="hidden" value="50"></li>
+      <li class="skill-name"> 頭突き<input type="hidden" value="10"></li>
+      <li class="skill-name"> 投擲<input type="hidden" value="25"></li>
+      <li class="skill-name"> マーシャルアーツ<input type="hidden" value="1"></li>
+      <li class="skill-name"> 拳銃<input type="hidden" value="20"></li>
+      <li class="skill-name"> サブマシンガン<input type="hidden" value="15"></li>
+      <li class="skill-name"> ショットガン<input type="hidden" value="30"></li>
+      <li class="skill-name"> マシンガン<input type="hidden" value="15"></li>
+      <li class="skill-name"> ライフル<input type="hidden" value="25"></li>
+      <h class="skill-header">探索技能</h>
+      <li class="skill-name"> 応急手当<input type="hidden" value="30"></li>
+      <li class="skill-name"> 鍵開け<input type="hidden" value="1"></li>
+      <li class="skill-name"> 隠す<input type="hidden" value="15"></li>
+      <li class="skill-name"> 隠れる<input type="hidden" value="10"></li>
+      <li class="skill-name"> 聞き耳<input type="hidden" value="25"></li>
+      <li class="skill-name"> 忍び歩き<input type="hidden" value="10"></li>
+      <li class="skill-name"> 写真術<input type="hidden" value="10"></li>
+      <li class="skill-name"> 精神分析<input type="hidden" value="1"></li>
+      <li class="skill-name"> 追跡<input type="hidden" value="10"></li>
+      <li class="skill-name"> 登攀<input type="hidden" value="40"></li>
+      <li class="skill-name"> 図書館<input type="hidden" value="25"></li>
+      <li class="skill-name"> 目星<input type="hidden" value="25"></li>
+      <h class="skill-header">行動技能</h>
+      <li class="skill-name"> 運転()<input type="hidden" value="20"></li>
+      <li class="skill-name"> 機械修理<input type="hidden" value="20"></li>
+      <li class="skill-name"> 重機械操作<input type="hidden" value="1"></li>
+      <li class="skill-name"> 乗馬<input type="hidden" value="5"></li>
+      <li class="skill-name"> 水泳<input type="hidden" value="25"></li>
+      <li class="skill-name"> 製作()<input type="hidden" value="5"></li>
+      <li class="skill-name"> 操縦()<input type="hidden" value="1"></li>
+      <li class="skill-name"> 跳躍<input type="hidden" value="25"></li>
+      <li class="skill-name"> 電気修理<input type="hidden" value="10"></li>
+      <li class="skill-name"> ナビゲート<input type="hidden" value="10"></li>
+      <li class="skill-name"> 変装<input type="hidden" value="1"></li>
+      <h class="skill-header">交渉技能</h>
+      <li class="skill-name">言いくるめ<input type="hidden" value="5"></li>
+      <li class="skill-name">信用<input type="hidden" value="15"></li>
+      <li class="skill-name">説得<input type="hidden" value="15"></li>
+      <li class="skill-name">値切り<input type="hidden" value="5"></li>
+      <li class="skill-name">母国語()<input type="hidden" value="20"></li>
+      <h class="skill-header">知識技能</h>
+      <li class="skill-name">医学<input type="hidden" value="5"></li>
+      <li class="skill-name">オカルト<input type="hidden" value="5"></li>
+      <li class="skill-name">化学<input type="hidden" value="1"></li>
+      <li class="skill-name">クトゥルフ神話<input type="hidden" value="0"></li>
+      <li class="skill-name">芸術()<input type="hidden" value="5"></li>
+      <li class="skill-name">経理<input type="hidden" value="10"></li>
+      <li class="skill-name">考古学<input type="hidden" value="1"></li>
+      <li class="skill-name">コンピュータ<input type="hidden" value="1"></li>
+      <li class="skill-name">心理学<input type="hidden" value="5"></li>
+      <li class="skill-name">人類学<input type="hidden" value="1"></li>
+      <li class="skill-name">生物学<input type="hidden" value="1"></li>
+      <li class="skill-name">地質学<input type="hidden" value="1"></li>
+      <li class="skill-name">電子工学<input type="hidden" value="1"></li>
+      <li class="skill-name">天文学<input type="hidden" value="1"></li>
+      <li class="skill-name">博物学<input type="hidden" value="10"></li>
+      <li class="skill-name">物理学<input type="hidden" value="1"></li>
+      <li class="skill-name">法律<input type="hidden" value="5"></li>
+      <li class="skill-name">薬学<input type="hidden" value="1"></li>
+      <li class="skill-name">歴史<input type="hidden" value="20"></li>
+    </div>
+    <div id="another-window-close"><label>×</label></div>
+  </div>
+
+</body>
+</html>
